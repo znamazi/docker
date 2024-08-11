@@ -1,0 +1,33 @@
+version: "3"
+services:
+  client:
+    build:
+      context: ./docker-react-client
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./docker-react-client:/app
+    depends_on:
+      - server
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=development
+
+  server:
+    build:
+      context: ./docker-node-app
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    volumes:
+      - ./docker-node-app:/app
+    networks:
+      - app-network
+    environment:
+      - NODE_ENV=development
+
+networks:
+  app-network:
+    driver: bridge
