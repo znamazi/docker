@@ -7,7 +7,7 @@ From node:20.10.0-alpine As ui-build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --omit=dev
 
 COPY . .
 RUN npm run build

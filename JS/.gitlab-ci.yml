@@ -1,0 +1,53 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_IMAGE: node:latest
+  DOCKER_IMAGE: docker:latest
+
+
+cache:
+  paths:
+    - node_modules/
+
+
+# build_node_app:
+#   stage: build
+#   image: $NODE_IMAGE
+#   script:
+#     - cd docker-node-app
+#     - npm ci
+#     - npm run build
+#   artifacts:
+#     paths:
+#       - docker-node-app/build
+#     expire_in: 1 week
+
+# build_react_client:
+#   stage: build
+#   image: node:latest
+#   script:
+#     - cd docker-react-client
+#     - npm ci
+#     - npm run build
+#   artifacts:
+#     paths:
+#       - docker-react-client/build
+#     expire_in: 1 week
+
+deploy_node_app:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t node-app docker-node-app
+
+deploy_react_client:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t react-client docker-react-client
