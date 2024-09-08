@@ -1,0 +1,38 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+
+build_frontend:
+  stage: build
+  script:
+    - docker-compose up -d frontend
+
+build_backend:
+  stage: build
+  script:
+    - docker-compose up -d backend
+
+test_frontend:
+  stage: test
+  script:
+    - docker-compose run frontend yarn run test
+
+test_backend:
+  stage: test
+  script:
+    - docker-compose run backend yarn run test
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying the application..."
